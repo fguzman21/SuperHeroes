@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fernando.com.superheroes">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -11,8 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NoActionBar"
         android:usesCleartextTraffic="true">
-
-
         <activity
             android:name=".Splash"
             android:theme="@style/Theme.NoActionBar">
@@ -22,15 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Views.SuperHeroActivity"
+        <activity
+            android:name=".Views.SuperHeroActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true"/>
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name=".Views.SuperHeroProfile"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
     </application>
-
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

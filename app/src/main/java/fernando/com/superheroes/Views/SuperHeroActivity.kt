@@ -3,7 +3,6 @@ package fernando.com.superheroes.Views
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,11 +25,12 @@ import retrofit2.awaitResponse
 
 class SuperHeroActivity : AppCompatActivity() {
 
-    private var ln_back : LinearLayout? = null
     private var progressBar: ProgressBar? = null
     private var recyclerViewVista: RecyclerView? = null
     private lateinit var recyclerViewModel: ViewModelSuperHeroList
     private var  ListaSuperHeroes = ArrayList<SuperHeroIdModel>()
+    private var Inicio : Int? = 1
+    private var Fin : Int? = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,20 +38,22 @@ class SuperHeroActivity : AppCompatActivity() {
         recyclerViewVista = findViewById(R.id.recyclerViewVista)
         progressBar = findViewById(R.id.progressBar)
         initRecyclerView()
-        getSuperHeroId(1)
-        getSuperHeroId(2)
-        getSuperHeroId(3)
-        getSuperHeroId(4)
+        recyclerViewVista!!.adapter = recyclerViewModel
+        /*Función para traer a los superheroes con los parametros iniciales*/
+        getSuperHeroGeneral(Inicio,Fin)
+
+
+
 
         recyclerViewVista!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    getSuperHeroId(5)
-                    getSuperHeroId(6)
-                    getSuperHeroId(7)
-                    getSuperHeroId(8)
-                    getSuperHeroId(9)
+
+                    Log.w("Inicio",Inicio.toString());
+                    Log.w("Inicio_Fin",Fin.toString());
+                    /*Función para traer a los superheroes con los nuevos parametros*/
+                    getSuperHeroGeneral(Inicio,Fin)
                 }
             }
         })
@@ -63,7 +65,6 @@ class SuperHeroActivity : AppCompatActivity() {
         recyclerViewVista?.apply {
             layoutManager = LinearLayoutManager(this@SuperHeroActivity)
 
-
             recyclerViewModel = ViewModelSuperHeroList(this@SuperHeroActivity)
             adapter = recyclerViewModel
 
@@ -74,8 +75,17 @@ class SuperHeroActivity : AppCompatActivity() {
         }
     }
 
+    private fun  getSuperHeroGeneral(inicio_request: Int?, fin_request: Int?) {
+        var lugar = 1
+        for(id_superhero in inicio_request!!..fin_request!!){
+                getSuperHeroId(id_superhero,lugar)
+                lugar++
+        }
+        this.Inicio = this.Inicio?.plus(5)
+        this.Fin = this.Fin?.plus(5)
+    }
 
-    private fun getSuperHeroId(Id:Int?) {
+    private fun getSuperHeroId(Id: Int?, lugar: Int) {
         progressBar!!.visibility = View.VISIBLE
         val retroInstance = RetroInstance.getRetroInstance().create(RetroService::class.java)
 
@@ -83,7 +93,7 @@ class SuperHeroActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val response = retroInstance.GetSuperHeroId(baseURL+Id).awaitResponse()
-                Log.w("Respuesta_Ws", response.toString())
+                Log.w("Respuesta_Ws"+Id, response.toString())
                 if (response.isSuccessful) {
 
                     val data_ws = response.body()!!
@@ -91,15 +101,15 @@ class SuperHeroActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
 
-                        /**** Listo General  General **/
-                        ListaSuperHeroes.add(SuperHeroIdModel("200",1,data_ws.name,
-                            SuperHeroIdImage(data_ws.image.url)
-                        ))
-                        recyclerViewModel.setListData(ListaSuperHeroes)
-                        recyclerViewModel.notifyDataSetChanged()
-                        recyclerViewVista!!.adapter = recyclerViewModel
-                        Log.w("Respuesta_Nombre",data_ws.name!!)
-                        eliminar_progess()
+                        if(data_ws.response.equals("success")){
+                            /**** Se agrega nuevo superheroe a la lista para despues mostrarlo **/
+                            ListaSuperHeroes.add(SuperHeroIdModel(data_ws.response,data_ws.id,data_ws.name,
+                                SuperHeroIdImage(data_ws.image.url)
+                            ))
+                            /*** Se ordena la lista de superheroes por ID **/
+                            OrdenarLista(lugar!!)
+                        }
+
 
                     }
 
@@ -119,8 +129,15 @@ class SuperHeroActivity : AppCompatActivity() {
 
     }
 
+    fun OrdenarLista(lugar: Int){
+        ListaSuperHeroes.sortBy { list -> list.id }
 
-    fun eliminar_progess(){
-        progressBar!!.visibility = View.GONE
+        if(lugar == 5){
+            recyclerViewModel.setListData(ListaSuperHeroes)
+            recyclerViewModel.notifyDataSetChanged()
+            progressBar!!.visibility = View.GONE
+        }
+
+
     }
 }

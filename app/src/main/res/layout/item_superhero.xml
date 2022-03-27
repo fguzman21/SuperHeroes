@@ -8,7 +8,6 @@
 
 
     <LinearLayout
-        android:id="@+id/ln_provider"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_margin="10dp"
@@ -32,11 +31,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/img_superheroe"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/profile" />
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#FF000000"/>
             </LinearLayout>
 
 

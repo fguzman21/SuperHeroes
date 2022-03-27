@@ -15,14 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="10dp"
+                android:text="SUPERHEROS"
                 android:textColor="@color/color_negro"
                 android:textSize="16dp"
-                android:text="SUPERHEROES"
                 android:textStyle="bold"></TextView>
         </LinearLayout>
         <LinearLayout
@@ -36,6 +37,13 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewVista"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent" />
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyle"
@@ -44,12 +52,6 @@
                     android:layout_centerInParent="true"
                     android:visibility="gone"
                     tools:visibility="visible" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewVista"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintStart_toStartOf="parent" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import fernando.com.superheroes.Models.SuperHeroIdModel
 import fernando.com.superheroes.R
+import fernando.com.superheroes.Views.SuperHeroProfile
 
 class ViewModelSuperHeroList(contexto: Context) : RecyclerView.Adapter<ViewModelSuperHeroList.MyViewHolder>() {
 
@@ -41,7 +43,7 @@ class ViewModelSuperHeroList(contexto: Context) : RecyclerView.Adapter<ViewModel
         contexto: Context
     ): RecyclerView.ViewHolder(view) {
 
-        val img_superheroe = view.findViewById<ImageView>(R.id.img_superheroe)
+        val img_superheroe = view.findViewById<CircleImageView>(R.id.img_superheroe)
         val txt_nombre = view.findViewById<TextView>(R.id.txt_nombre)
         val btn_ir = view.findViewById<ImageButton>(R.id.btn_ir)
         val micontexto = contexto
@@ -56,7 +58,11 @@ class ViewModelSuperHeroList(contexto: Context) : RecyclerView.Adapter<ViewModel
                     .into(img_superheroe)
 
             btn_ir.setOnClickListener{
-
+                var intent = Intent(micontexto, SuperHeroProfile::class.java)
+                intent.putExtra("id_superheroe",data.id.toString())
+                intent.putExtra("nombre_superheroe",data.name)
+                intent.putExtra("imagen_perfil",data.image.url)
+                micontexto.startActivity(intent)
             }
         }
 

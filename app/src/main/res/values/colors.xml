@@ -13,4 +13,6 @@
     <color name="color_blanco">#FFF</color>
     <color name="color_gris">#D3D3D3</color>
     <color name="color_gris_claro">#f9f9f9</color>
+    <color name="color_amarillo">#edca02</color>
+
 </resources>
